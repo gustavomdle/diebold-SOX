@@ -3,7 +3,7 @@
   "solution": {
     "name": "SOX-diebold",
     "id": "c18151ee-2a0b-cbab-16b1-621d62d0e8c3",
-    "version": "1.0.0.7",
+    "version": "1.0.0.0",
     "includeClientSideAssets": true,
     "isDomainIsolated": false,
     "developer": {

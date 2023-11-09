@@ -13,6 +13,7 @@ import { ISoxRevisarAcessosProps } from './components/ISoxRevisarAcessosProps';
 
 export interface ISoxRevisarAcessosWebPartProps {
   description: string;
+  tipoVisualizacao: string
 }
 
 export default class SoxRevisarAcessosWebPart extends BaseClientSideWebPart<ISoxRevisarAcessosWebPartProps> {
@@ -21,7 +22,10 @@ export default class SoxRevisarAcessosWebPart extends BaseClientSideWebPart<ISox
     const element: React.ReactElement<ISoxRevisarAcessosProps> = React.createElement(
       SoxRevisarAcessos,
       {
-        description: this.properties.description
+        description: this.properties.description,
+        context: this.context,
+        siteurl: this.context.pageContext.web.absoluteUrl,
+        tipoVisualizacao: this.properties.tipoVisualizacao,
       }
     );
 
@@ -49,6 +53,9 @@ export default class SoxRevisarAcessosWebPart extends BaseClientSideWebPart<ISox
               groupFields: [
                 PropertyPaneTextField('description', {
                   label: strings.DescriptionFieldLabel
+                }),
+                PropertyPaneTextField('tipoVisualizacao', {
+                  label: "Tipo de visualização"
                 })
               ]
             }
