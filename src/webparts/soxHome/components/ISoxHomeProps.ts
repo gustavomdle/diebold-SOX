@@ -1,9 +1,7 @@
 import { WebPartContext } from "@microsoft/sp-webpart-base";
 
-export interface ISoxRevisarAcessosProps {
+export interface ISoxHomeProps {
   description: string;
   context: WebPartContext;
   siteurl: string;
-  tipoVisualizacao: string
 }
-

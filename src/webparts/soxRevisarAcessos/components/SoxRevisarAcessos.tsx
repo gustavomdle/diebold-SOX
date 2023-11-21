@@ -44,6 +44,8 @@ var _revisaoJaRealizada = false;
 var _opcao;
 var _temAvaliacaoGestor = 0;
 var _itemCountRevisoesFinalizadasGestor = 0;
+var _quarter;
+var _ano;
 
 export interface IShowEmployeeStates {
   itemsList: any[],
@@ -129,6 +131,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
     //jQuery("#conteudoRevisaoNaoNecessaria").hide();
     //jQuery("#conteudoRevisaoJaRealizada").hide();
 
+    this.getConfiguracao();
     this.getNomeUsuario();
     this.getRevisao();
     this.exibeBotao();
@@ -556,7 +559,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
   protected async getNomeUsuario() {
 
     jQuery.ajax({
-      url: `${this.props.siteurl}/_api/web/lists/getbytitle('Usuarios')/items?$top=4999&$orderby= ID desc&$select=*&$filter=Title eq '${_currentUser}'`,
+      url: `${this.props.siteurl}/_api/web/lists/getbytitle('Gestores')/items?$top=4999&$orderby= ID desc&$select=*&$filter=Title eq '${_currentUser}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
       type: "GET",
       async: false,
       headers: { 'Accept': 'application/json; odata=verbose;' },
@@ -588,6 +591,64 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
   }
 
 
+  protected async getConfiguracao() {
+
+    jQuery.ajax({
+      url: `${this.props.siteurl}/_api/web/lists/getbytitle('Configuracoes')/items?$top=1&$orderby= ID desc&$select=*&$filter=Title eq 'Ano'`,
+      type: "GET",
+      async: false,
+      headers: { 'Accept': 'application/json; odata=verbose;' },
+      success: function (resultData) {
+
+        if (resultData.d.results.length > 0) {
+
+          for (var i = 0; i < resultData.d.results.length; i++) {
+
+            _ano = resultData.d.results[i].Valor;
+
+            console.log("_ano", _ano);
+
+          }
+
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR.responseText);
+      }
+
+    });
+
+
+    jQuery.ajax({
+      url: `${this.props.siteurl}/_api/web/lists/getbytitle('Configuracoes')/items?$top=1&$orderby= ID desc&$select=*&$filter=Title eq 'Quarter'`,
+      type: "GET",
+      async: false,
+      headers: { 'Accept': 'application/json; odata=verbose;' },
+      success: function (resultData) {
+
+        if (resultData.d.results.length > 0) {
+
+          for (var i = 0; i < resultData.d.results.length; i++) {
+
+            _quarter = resultData.d.results[i].Valor;
+
+            console.log("_quarter", _quarter);
+
+          }
+
+        }
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR.responseText);
+      }
+
+    });
+
+
+
+  }
+
+
   protected async getRevisao() {
 
 
@@ -598,11 +659,11 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
     var tipoVisualizacao = this.props.tipoVisualizacao;
 
     if (tipoVisualizacao == "Revisão do Gestor do Perfil") {
-      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Gestor do Perfil')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Gestor eq '${_loginRede}'`;
+      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Gestor do Perfil')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Gestor eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`;
     }
 
     else if (tipoVisualizacao == "Revisão do Owner de Programa") {
-      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}'`;
+      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`;
     }
 
 
@@ -633,7 +694,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
     if (tipoVisualizacao == "Revisão do Gestor do Perfil") {
 
       jQuery.ajax({
-        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Gestor do Perfil')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Gestor eq '${_loginRede}'`,
+        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Gestor do Perfil')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Gestor eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
         type: "GET",
         async: false,
         headers: { 'Accept': 'application/json; odata=verbose;' },
@@ -655,7 +716,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
 
 
       jQuery.ajax({
-        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisões finalizadas')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Usuario eq '${_loginRede}' and TipoRevisao eq 'Gestor X Perfil'`,
+        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisões finalizadas')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Usuario eq '${_loginRede}' and TipoRevisao eq 'Gestor X Perfil' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
         type: "GET",
         async: false,
         headers: { 'Accept': 'application/json; odata=verbose;' },
@@ -705,7 +766,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
 
 
       jQuery.ajax({
-        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}'`,
+        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
         type: "GET",
         async: false,
         headers: { 'Accept': 'application/json; odata=verbose;' },
@@ -727,7 +788,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
 
 
       jQuery.ajax({
-        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisões finalizadas')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Usuario eq '${_loginRede}' and TipoRevisao eq 'Owner X Programa'`,
+        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisões finalizadas')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Usuario eq '${_loginRede}' and TipoRevisao eq 'Owner X Programa' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
         type: "GET",
         async: false,
         headers: { 'Accept': 'application/json; odata=verbose;' },
@@ -806,8 +867,10 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
 
   protected async finalizarAnalise() {
 
-    jQuery("#btnFinalizarAnaliseGestor").prop("disabled", true);
-    jQuery("#btnFinalizarAnaliseGestor").prop("disabled", true);
+    //jQuery("#btnFinalizarAnaliseOwner").prop("disabled", true);
+    //jQuery("#btnFinalizarAnaliseGestor").prop("disabled", true);
+    jQuery("#modalConfirmarFinalizarAnaliseOwner").modal('hide');
+    jQuery("#modalConfirmarFinalizarAnaliseGestor").modal('hide');
     jQuery("#modalCarregando").modal({ backdrop: 'static', keyboard: false });
 
     await _web.lists
@@ -815,19 +878,89 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
       .items.add({
         Title: _currentUser,
         Usuario: _loginRede,
-        TipoRevisao: _opcao
+        TipoRevisao: _opcao,
+        Ano: _ano,
+        Quarter: _quarter
       })
       .then(async response => {
 
-        jQuery("#modalConfirmarFinalizarAnaliseOwner").modal('hide');
-        jQuery("#modalConfirmarFinalizarAnaliseGestor").modal('hide');
-        jQuery("#btnFinalizarAnaliseGestor").prop("disabled", false);
-        jQuery("#btnFinalizarAnaliseGestor").prop("disabled", false);
-        jQuery("#modalSucesso").modal({ backdrop: 'static', keyboard: false })
+        jQuery.ajax({
+          url: `${this.props.siteurl}/_api/web/lists/getbytitle('Gestores')/items?$top=4999&$orderby= ID desc&$select=*&$filter=Title eq '${_currentUser}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
+          type: "GET",
+          async: false,
+          headers: { 'Accept': 'application/json; odata=verbose;' },
+          success: async function (resultData) {
+
+            console.log("resultData", resultData);
+
+            var arrProducao = [];
+            var arrAssistenciaTecnica = [];
+
+            if (resultData.d.results.length > 0) {
+
+              for (var i = 0; i < resultData.d.results.length; i++) {
+
+                var id = resultData.d.results[i].ID;
+
+                if (_opcao == "Owner X Programa") {
+
+                  await _web.lists
+                    .getByTitle("Gestores")
+                    .items.getById(id).update({
+                      Owner: "Revisado",
+                    })
+                    .then(async response => {
+
+                      jQuery("#btnFinalizarAnaliseOwner").prop("disabled", false);
+                      jQuery("#btnFinalizarAnaliseGestor").prop("disabled", false);
+                      jQuery("#modalSucesso").modal({ backdrop: 'static', keyboard: false })
+
+                    }).catch(err => {
+                      console.log("err", err);
+                    });
+
+                }
+
+                if (_opcao == "Gestor X Perfil") {
+
+                  await _web.lists
+                    .getByTitle("Gestores")
+                    .items.getById(id).update({
+                      Gestor: "Revisado",
+                    })
+                    .then(async response => {
+
+                      jQuery("#modalConfirmarFinalizarAnaliseOwner").modal('hide');
+                      jQuery("#modalConfirmarFinalizarAnaliseGestor").modal('hide');
+                      jQuery("#btnFinalizarAnaliseOwner").prop("disabled", false);
+                      jQuery("#btnFinalizarAnaliseGestor").prop("disabled", false);
+                      jQuery("#modalSucesso").modal({ backdrop: 'static', keyboard: false })
+
+                    }).catch(err => {
+                      console.log("err", err);
+                    });
+
+
+                }
+
+
+
+              }
+
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR.responseText);
+          }
+
+        });
 
       }).catch(err => {
         console.log("err", err);
       });
+
+
+
 
 
   }
@@ -837,18 +970,8 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
 
     jQuery("#modalSucesso").modal('hide');
 
-    if (_opcao == "Owner X Programa") {
+    window.location.href = `Home.aspx`;
 
-      window.location.href = `Revisão-do-Owner-de-Programa.aspx`;
-
-    }
-
-    if (_opcao == "Gestor X Perfil") {
-
-      window.location.href = `Revisão-do-Gestor-do-Perfil.aspx`;
-
-    }
-    //window.location.href = `OMP-Editar.aspx?DocumentoID=${_idOMP}&DocumentoNumero=${_documentoNumero}`;
   }
 
 

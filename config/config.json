@@ -9,11 +9,20 @@
           "manifest": "./src/webparts/soxRevisarAcessos/SoxRevisarAcessosWebPart.manifest.json"
         }
       ]
+    },
+    "sox-home-web-part": {
+      "components": [
+        {
+          "entrypoint": "./lib/webparts/soxHome/SoxHomeWebPart.js",
+          "manifest": "./src/webparts/soxHome/SoxHomeWebPart.manifest.json"
+        }
+      ]
     }
   },
   "externals": {},
   "localizedResources": {
     "ControlStrings": "node_modules/@pnp/spfx-controls-react/lib/loc/{locale}.js",
-    "SoxRevisarAcessosWebPartStrings": "lib/webparts/soxRevisarAcessos/loc/{locale}.js"
+    "SoxRevisarAcessosWebPartStrings": "lib/webparts/soxRevisarAcessos/loc/{locale}.js",
+    "SoxHomeWebPartStrings": "lib/webparts/soxHome/loc/{locale}.js"
   }
 }

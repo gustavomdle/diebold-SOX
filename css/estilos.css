@@ -155,6 +155,10 @@
     table-layout: auto !important;
 }
 
+.botosRevisao{
+    padding-top: 10px;
+}
+
 .btnCustom {
     margin-top: 10px;
 }
@@ -169,6 +173,23 @@
 
 .ico {
     color: #ced4da;
+    font-size: 16px;
+}
+
+.green{
+    color: green;
+}
+
+.gray{
+    color: gray;
+}
+
+.blue{
+    color: blue;
+}
+
+.alinhamento-meio{
+    vertical-align:top !important;
 }
 
 .alinhamentoMeio {
