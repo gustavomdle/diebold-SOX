@@ -818,7 +818,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
 
       if (_loginRede.includes("gardee")) {
 
-        console.log("login gardee");
+        console.log("login gardee 2");
         var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'gardee1'`;
 
 
