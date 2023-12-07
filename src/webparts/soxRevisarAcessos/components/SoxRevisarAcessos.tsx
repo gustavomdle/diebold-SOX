@@ -136,6 +136,9 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
     this.getRevisao();
     this.exibeBotao();
 
+
+    jQuery("#conteudoFiltro").hide();
+
     //
 
   }
@@ -416,6 +419,18 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
         <br id=""></br><br></br>
 
 
+        <div className="form-group" id="conteudoFiltro">
+          <div className="form-row">
+            <div className="form-group col-md">
+              <span>Revisão:</span>
+              <select id="ddlFiltro" className="form-control" style={{ "width": "200px" }} onChange={(e) => this.onChangeFiltro(e.target.value)} >
+                <option value="1" selected>Parte 1</option>
+                <option value="2">Parte 2</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
 
         <p>Resultado: <span className="text-info" id="txtCount"></span> registro(s) encontrado(s)</p>
         <div className="tabelaComScrool">
@@ -654,7 +669,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
 
     jQuery('#txtCount').html("0");
 
-    var reactHandlerSoftwares = this;
+    var reactHandlerItems = this;
 
     var tipoVisualizacao = this.props.tipoVisualizacao;
 
@@ -663,8 +678,44 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
     }
 
     else if (tipoVisualizacao == "Revisão do Owner de Programa") {
-      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`;
+
+      console.log("Revisão do Owner de Programa");
+
+      console.log("_loginRede 2", _loginRede);
+
+
+      if (_loginRede.includes("gardee")) {
+
+        console.log("login gardee");
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'gardee1'`;
+
+        setTimeout(async () => {
+          jQuery("#conteudoFiltro").show();
+        }, 1500);
+
+      }
+
+      else if (_loginRede.includes("romanj")) {
+
+        console.log("login romanj");
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'romanj1'`;
+
+        setTimeout(async () => {
+          jQuery("#conteudoFiltro").show();
+        }, 1500);
+
+      }
+
+
+      else {
+
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`;
+
+      }
+
     }
+
+    console.log("url", url);
 
 
     jQuery.ajax({
@@ -673,7 +724,7 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
       headers: { 'Accept': 'application/json; odata=verbose;' },
       success: function (resultData) {
         jQuery('#txtCount').html(resultData.d.results.length);
-        reactHandlerSoftwares.setState({
+        reactHandlerItems.setState({
           itemsList: resultData.d.results
         });
       },
@@ -765,8 +816,31 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
     else if (tipoVisualizacao == "Revisão do Owner de Programa") {
 
 
+      if (_loginRede.includes("gardee")) {
+
+        console.log("login gardee");
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'gardee1'`;
+
+
+      }
+
+      else if (_loginRede.includes("romanj")) {
+
+        console.log("login romanj");
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'romanj1'`;
+
+
+      }
+
+      else {
+
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`;
+
+      }
+
+
       jQuery.ajax({
-        url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
+        url: url,
         type: "GET",
         async: false,
         headers: { 'Accept': 'application/json; odata=verbose;' },
@@ -973,6 +1047,71 @@ export default class SoxRevisarAcessos extends React.Component<ISoxRevisarAcesso
     window.location.href = `Home.aspx`;
 
   }
+
+  private onChangeFiltro = (val) => {
+
+    if (val == "1") {
+
+      if (_loginRede.includes("gardee")) {
+
+        console.log("login gardee");
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'gardee1'`;
+
+      }
+
+      else if (_loginRede.includes("romanj")) {
+
+        console.log("login romanj");
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'romanj1'`;
+
+      }
+
+    }
+
+
+    else if (val == "2") {
+
+
+      if (_loginRede.includes("gardee")) {
+
+        console.log("login gardee");
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'gardee2'`;
+
+      }
+
+      else if (_loginRede.includes("romanj")) {
+
+        var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'romanj2'`;
+
+      }
+
+
+    }
+
+    var reactHandlerItems = this;
+
+    jQuery.ajax({
+      url: url,
+      type: "GET",
+      headers: { 'Accept': 'application/json; odata=verbose;' },
+      success: function (resultData) {
+        jQuery('#txtCount').html(resultData.d.results.length);
+        reactHandlerItems.setState({
+          itemsList: resultData.d.results
+        });
+      },
+      error: function (jqXHR, textStatus, errorThrown) {
+        console.log(jqXHR.responseText);
+      }
+    });
+
+
+
+
+
+
+  }
+
 
 
 }

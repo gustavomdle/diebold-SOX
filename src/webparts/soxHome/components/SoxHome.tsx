@@ -294,6 +294,11 @@ export default class SoxHome extends React.Component<ISoxHomeProps, {}> {
     jQuery("#txtTitulo").html(`Minhas revisões pendentes - Quarter ${quarter} ${_ano}`);
 
 
+
+
+
+
+
     jQuery.ajax({
       url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Gestor do Perfil')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Gestor eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
       type: "GET",
@@ -361,8 +366,31 @@ export default class SoxHome extends React.Component<ISoxHomeProps, {}> {
     //////////////////////////
 
 
+    if (_loginRede.includes("gardee")) {
+
+      console.log("login gardee");
+      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'gardee1'`;
+
+
+    }
+
+    else if (_loginRede.includes("romanj")) {
+
+      console.log("login romanj");
+      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Filtro eq  'romanj1'`;
+
+
+    }
+
+    else {
+
+      var url = `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}'`;
+
+    }
+
+
     jQuery.ajax({
-      url: `${this.props.siteurl}/_api/web/lists/getbytitle('Revisão do Owner de Programa')/items?$top=4999&$orderby= Created desc&$select=*&$filter=Title eq '${_loginRede}' and Ano eq '${_ano}' and Quarter eq '${_quarter}'`,
+      url: url,
       type: "GET",
       async: false,
       headers: { 'Accept': 'application/json; odata=verbose;' },
